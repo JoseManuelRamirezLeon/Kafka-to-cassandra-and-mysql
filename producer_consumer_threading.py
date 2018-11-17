@@ -5,6 +5,11 @@ from tweepy import OAuthHandler
 from tweepy import Stream
 from kafka import SimpleProducer, KafkaClient
 
+import mysql.connector
+import threading, logging, time
+import multiprocessing
+from cassandra.cluster import Cluster
+
 access_token = "insert your own access token"
 access_token_secret =  "insert your own token secret"
 consumer_key =  "insert your own consumer key"
@@ -29,11 +34,6 @@ def prod():
     stream = Stream(auth, l)
     stream.filter(track="trump")
 
-##!/usr/bin/env python
-import mysql.connector
-import threading, logging, time
-import multiprocessing
-from cassandra.cluster import Cluster
 
 from kafka import KafkaConsumer, KafkaProducer
 
