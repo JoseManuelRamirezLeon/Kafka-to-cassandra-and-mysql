@@ -1,24 +1,25 @@
-import threading
+import multiprocessing
+import threading, logging, time
 
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
-from kafka import SimpleProducer, KafkaClient
+from kafka import SimpleProducer, SimpleClient
+from kafka import KafkaConsumer
+
 
 import mysql.connector
-import threading, logging, time
-import multiprocessing
 from cassandra.cluster import Cluster
 
-access_token = "insert your own access token"
-access_token_secret =  "insert your own token secret"
-consumer_key =  "insert your own consumer key"
-consumer_secret =  "insert your own consumer secret"
+access_token = "760357019001954304-LsDTXYyzAREMFSnLvcvlJYB6AClh9sj"
+access_token_secret =  "zN57Xc9I0HkugQC113X43F81PxAY7Dyos6GXXGZcXiRyl"
+consumer_key =  "zmXr9bDWoRFzQtTevEL9CUted"
+consumer_secret =  "tBlBFQtoDV3MdWD1DtDI5A6DPjdcAyQA0mgI8JFoOlXXyyoQoS"
 
 
 class StdOutListener(StreamListener):
     def on_data(self, data):
-        kafka = KafkaClient("localhost:9092")
+        kafka = SimpleClient("localhost:9092")
         producer = SimpleProducer(kafka)
         producer.send_messages("twitter", data.encode('utf-8'))
         print (data)
@@ -35,7 +36,6 @@ def prod():
     stream.filter(track="trump")
 
 
-from kafka import KafkaConsumer, KafkaProducer
 
 class Consumer(multiprocessing.Process):
     def __init__(self):
