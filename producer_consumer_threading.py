@@ -11,10 +11,10 @@ from kafka import KafkaConsumer
 import mysql.connector
 from cassandra.cluster import Cluster
 
-access_token = "760357019001954304-LsDTXYyzAREMFSnLvcvlJYB6AClh9sj"
-access_token_secret =  "zN57Xc9I0HkugQC113X43F81PxAY7Dyos6GXXGZcXiRyl"
-consumer_key =  "zmXr9bDWoRFzQtTevEL9CUted"
-consumer_secret =  "tBlBFQtoDV3MdWD1DtDI5A6DPjdcAyQA0mgI8JFoOlXXyyoQoS"
+access_token = "insert your own"
+access_token_secret =  "insert your own"
+consumer_key =  "insert your own"
+consumer_secret =  "insert your own"
 
 
 class StdOutListener(StreamListener):
