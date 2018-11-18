@@ -42,7 +42,6 @@ class Consumer(multiprocessing.Process):
         multiprocessing.Process.__init__(self)
         self.stop_event = multiprocessing.Event()
 
-
     def stop(self):
         self.stop_event.set()
 
@@ -50,14 +49,14 @@ class Consumer(multiprocessing.Process):
         consumer = KafkaConsumer(bootstrap_servers='localhost:9092',
                                  auto_offset_reset='earliest',
                                  consumer_timeout_ms=1000)
+        
+        #Subscribe to kafka topic named 'twitter', which, unsurprisingly, carries twitter messages 
         consumer.subscribe(['twitter'])
-
-
-
+        
+        #Continuously insert tweets into cassandra and mysql 
         while True:
             for message in consumer:
                 tweet_string = str(message)
-
 
                 #Insert values into cassandra
 
@@ -65,24 +64,30 @@ class Consumer(multiprocessing.Process):
                 session = cluster.connect('twitter')
                 preparedTweetInsert = session.prepare(
                     """
-                    INSERT INTO twitter_cassandra2 (id, tweet)
+                    INSERT INTO twitter_cassandra (id, tweet)
                     VALUES (?,?)
                     """
                 )
-                #mensaje = tweet_string[inicio:fin+1]
-                #print(mensaje)
+
+                #tweet id is within characters 152 through 207, whereas the message is contained 
+                #within characters 208 through 405
                 session.execute(preparedTweetInsert, [tweet_string[152:207],tweet_string[208:405]])
 
-                #Insert values into mysql
-                mydb = mysql.connector.connect(host = "localhost", user = "root",
-                                               passwd = "abc123",database = "twitter")
+                #use your mysql database credentials
+                mydb = mysql.connector.connect(host = "localhost", user = "user",
+                                               passwd = "password",database = "twitter")
 
                 mycursor = mydb.cursor()
-
-                sql = "INSERT INTO tweets2 (id, tweet) VALUES ('{}', '{}') ON DUPLICATE KEY UPDATE ID=ID;"
-                #val = (tweet_string[152:207],tweet_string[208:405])
+                
+                #mysql table is called tweets
+                #sql statement is a basic insert statement
+                sql = "INSERT INTO tweets (id, tweet) VALUES ('{}', '{}') ON DUPLICATE KEY UPDATE ID=ID;"
+                
+                ##tweet id is within characters 152 through 207, whereas the message is contained 
+                #within characters 208 through 405
+                #sql statment is executed, replacing backslashes in the tweet so that mysql does not get confused
                 mycursor.execute(sql.format(tweet_string[152:207],tweet_string[219:405].replace('\\','').replace('\'', '')))
-
+                #sql statment is commited
                 mydb.commit()
 
                 # if self.stop_event.is_set():
