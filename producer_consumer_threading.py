@@ -16,7 +16,7 @@ access_token_secret =  "insert your own"
 consumer_key =  "insert your own"
 consumer_secret =  "insert your own"
 
-
+#This is a class to create objects which listen to twitter messages and send them to a kafka topic called "twitter":
 class StdOutListener(StreamListener):
     def on_data(self, data):
         kafka = SimpleClient("localhost:9092")
@@ -50,7 +50,7 @@ class Consumer(multiprocessing.Process):
                                  auto_offset_reset='earliest',
                                  consumer_timeout_ms=1000)
         
-        #Subscribe to kafka topic named 'twitter', which, unsurprisingly, carries twitter messages 
+        #Subscribe to kafka topic named 'twitter'
         consumer.subscribe(['twitter'])
         
         #Continuously insert tweets into cassandra and mysql 
@@ -59,7 +59,6 @@ class Consumer(multiprocessing.Process):
                 tweet_string = str(message)
 
                 #Insert values into cassandra
-
                 cluster = Cluster()
                 session = cluster.connect('twitter')
                 preparedTweetInsert = session.prepare(
@@ -83,15 +82,12 @@ class Consumer(multiprocessing.Process):
                 #sql statement is a basic insert statement
                 sql = "INSERT INTO tweets (id, tweet) VALUES ('{}', '{}') ON DUPLICATE KEY UPDATE ID=ID;"
                 
-                ##tweet id is within characters 152 through 207, whereas the message is contained 
-                #within characters 208 through 405
+                #tweet id is within characters 152 through 207, message within characters 208 through 405
                 #sql statment is executed, replacing backslashes in the tweet so that mysql does not get confused
                 mycursor.execute(sql.format(tweet_string[152:207],tweet_string[219:405].replace('\\','').replace('\'', '')))
                 #sql statment is commited
                 mydb.commit()
 
-                # if self.stop_event.is_set():
-                #     break
 
         consumer.close()
 
