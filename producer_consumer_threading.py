@@ -16,7 +16,7 @@ access_token_secret =  "insert your own"
 consumer_key =  "insert your own"
 consumer_secret =  "insert your own"
 
-#This is a class to create objects which listen to twitter messages and send them to a kafka topic called "twitter":
+#This is a class to create a streamlistener, which we will use later to create a twitter stream:
 class StdOutListener(StreamListener):
     def on_data(self, data):
         kafka = SimpleClient("localhost:9092")
