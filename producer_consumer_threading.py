@@ -11,6 +11,7 @@ from kafka import KafkaConsumer
 import mysql.connector
 from cassandra.cluster import Cluster
 
+# These access token and secret are obtained when applying for a twitter api:
 access_token = "insert your own"
 access_token_secret =  "insert your own"
 consumer_key =  "insert your own"
@@ -27,13 +28,15 @@ class StdOutListener(StreamListener):
     def on_error(self, status):
         print (status)
 
+# This function creates a stream listener and starts a stream which shows all messages that contains the word 'python'
 def prod():
-
+    #a stream listener object is created using the access token and secret
     l = StdOutListener()
     auth = OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
+    #A stream which listens to all twitters that contain the word 'python is created
     stream = Stream(auth, l)
-    stream.filter(track="trump")
+    stream.filter(track="python")
 
 
 
