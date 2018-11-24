@@ -42,6 +42,7 @@ def prod():
 
 
 #This class consumes messages from kafka and inserts them into cassandra and mysql
+#It inherits from the multiprocessing.Process class in order to be able to start several consumers
 class Consumer(multiprocessing.Process):
     def __init__(self):
         multiprocessing.Process.__init__(self)
