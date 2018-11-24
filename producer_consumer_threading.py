@@ -19,6 +19,7 @@ consumer_secret =  "insert your own"
 
 #This is a class to create a streamlistener, which we will use later to create a twitter stream:
 class StdOutListener(StreamListener):
+    #This methods sends data from the twitter stream into the kafka topic 'twitter'
     def on_data(self, data):
         kafka = SimpleClient("localhost:9092")
         producer = SimpleProducer(kafka)
@@ -40,7 +41,7 @@ def prod():
     stream.filter(track="python")
 
 
-
+#This class consumes messages from kafka and inserts them into cassandra and mysql
 class Consumer(multiprocessing.Process):
     def __init__(self):
         multiprocessing.Process.__init__(self)
@@ -83,7 +84,6 @@ class Consumer(multiprocessing.Process):
                 mycursor = mydb.cursor()
                 
                 #mysql table is called tweets
-                #sql statement is a basic insert statement
                 sql = "INSERT INTO tweets (id, tweet) VALUES ('{}', '{}') ON DUPLICATE KEY UPDATE ID=ID;"
                 
                 #tweet id is within characters 152 through 207, message within characters 208 through 405
