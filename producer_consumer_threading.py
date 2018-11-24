@@ -28,14 +28,15 @@ class StdOutListener(StreamListener):
     def on_error(self, status):
         print (status)
 
-# This function creates a stream listener and starts a stream which shows all messages that contains the word 'python'
+# This function creates a stream listener and starts a stream which shows all messages that contain the word 'python'
 def prod():
-    #a stream listener object is created using the access token and secret
+    #A stream listener object is created
     l = StdOutListener()
     auth = OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
-    #A stream which listens to all twitters that contain the word 'python is created
+    #A tweepy stream object is created by using the stream listener and the api credentials
     stream = Stream(auth, l)
+    #Finally, a twitter stream which contains all tweets that have the word 'python' is created
     stream.filter(track="python")
 
 
