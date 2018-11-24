@@ -95,7 +95,7 @@ class Consumer(multiprocessing.Process):
 
         consumer.close()
 
-
+# This function is used to just start a kafka consumer - which will, in turn, send the tweets to cassandra and mysql 
 def cons():
 
     tasks = [
@@ -105,13 +105,8 @@ def cons():
     for t in tasks:
         t.start()
 
-    time.sleep(10)
 
-    for task in tasks:
-        task.stop()
-
-
-
+#Finally, we use 2 threads to be able to simultaneously send and consume messages from kafka
 t1 = threading.Thread(target=prod)
 t1.start()
 
