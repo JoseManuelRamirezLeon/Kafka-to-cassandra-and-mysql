@@ -14,4 +14,17 @@ tar xvzf kafka_2.11-2.0.0.tgz
 ```
 Likewise, download producer_consumer_threading.py from this project.
 
+From the kafka folder, start a zookeeper server:
+```
+bin/zookeeper-server-start.sh config/zookeeper.properties
+```
+and a kafka server:
+```
+bin/kafka-server-start.sh config/server.properties
+```
+Now, create a kafka topic named 'twitter':
+```
+bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic twitter
+```
+
 Finally, execute producer_consumer_threading.py using python 3 and you are good to go :)
