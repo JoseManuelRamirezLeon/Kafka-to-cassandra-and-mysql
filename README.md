@@ -8,7 +8,7 @@ tar xvzf zookeeper-3.4.10.tar.gz
 ```
 
 
-[Download](https://www.apache.org/dyn/closer.cgi?path=/kafka/2.0.0/kafka_2.11-2.0.0.tgz) Apache Kafka and un-tar it:
+[Download](https://www.apache.org/dyn/closer.cgi?path=/kafka/2.0.0/kafka_2.11-2.0.0.tgz) Apache Kafka and untar it:
 ```
 tar xvzf kafka_2.11-2.0.0.tgz
 ```
