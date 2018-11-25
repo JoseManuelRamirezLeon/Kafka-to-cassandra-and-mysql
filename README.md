@@ -12,4 +12,4 @@ tar xvzf zookeeper-3.4.10.tar.gz
 ```
 tar xvzf kafka_2.11-2.0.0.tgz
 ```
-
+Now, download 
