@@ -84,9 +84,12 @@ class Consumer(multiprocessing.Process):
         tweet_strings = tweet_strings.map(lambda tweet_string: tweet_string[:tweet_string.find(fin_texto)])
         tweet_string_length = tweet_strings.map(lambda tweet: len(tweet))
 
-        #tweet_string_length.foreachRDD(lambda rdd: rdd.foreach(lambda line: print(line)))
+        def find_average(rdd):
+            all_chars = rdd.reduce(lambda x, y: x + y)
+            all_tweets = rdd.count()
+            return all_chars/all_tweets
 
-        tweet_string_length.foreachRDD(lambda rdd: print(rdd.reduce(lambda x, y: x + y)/rdd.count()))
+        tweet_string_length.foreachRDD(lambda rdd: print(find_average(rdd)))
 
         # start the streaming context
         ssc.start()
